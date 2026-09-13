@@ -1,0 +1,57 @@
+========================================================
+     DEMONSTRATION 1: INCONSISTENT LOCK ORDER (BAD)     
+========================================================
+Process A order: Lock1 -> Lock2
+Process B order: Lock2 -> Lock1
+
+[Process A] Marker: Attempting to acquire Lock1...
+[Process A] Marker: ACQUIRED Lock1
+[Process B] Marker: Attempting to acquire Lock2...
+[Process B] Marker: ACQUIRED Lock2
+
+--- Deliberate delay elapsed ---
+[Process A] Marker: Attempting to acquire Lock2...
+[Process A] Marker: WAITING for Lock2 (Held by Process 2)
+[Process B] Marker: Attempting to acquire Lock1...
+[Process B] Marker: WAITING for Lock1 (Held by Process 1)
+
+>>> STATUS: DEADLOCK DETECTED! Both processes hanging in circular wait.
+
+========================================================
+     DEMONSTRATION 2: STRICT GLOBAL ORDERING (FIXED)    
+========================================================
+Global Hierarchy: Lock1 < Lock2 (All processes acquire Lock1 then Lock2)
+
+[Process A] Marker: Attempting to acquire Lock1...
+[Process A] Marker: ACQUIRED Lock1
+[Process B] Marker: Attempting to acquire Lock1...
+[Process B] Marker: WAITING for Lock1 (Held by Process 1)
+[Process A] Marker: Attempting to acquire Lock2...
+[Process A] Marker: ACQUIRED Lock2
+[Process A] Marker: Working in critical section...
+[Process A] Marker: RELEASED Lock2
+[Process A] Marker: RELEASED Lock1
+
+--- Process A finished; Process B unblocked ---
+[Process B] Marker: Attempting to acquire Lock1...
+[Process B] Marker: ACQUIRED Lock1
+[Process B] Marker: Attempting to acquire Lock2...
+[Process B] Marker: ACQUIRED Lock2
+[Process B] Marker: Working in critical section...
+[Process B] Marker: RELEASED Lock2
+[Process B] Marker: RELEASED Lock1
+
+>>> STATUS: SUCCESS! All processes completed without deadlock.
+
+----------------------------------------------------------------------
+WRITTEN EXPLANATION: WHY CONSISTENT ORDERING ELIMINATES CIRCULAR WAIT
+----------------------------------------------------------------------
+For a deadlock to occur, all four Coffman conditions must hold simultaneously:
+1. Mutual Exclusion
+2. Hold and Wait
+3. No Preemption
+4. Circular Wait
+
+Resource Ordering (Hierarchical Allocation) directly attacks and invalidates the 4th condition: Circular Wait.
+
+By imposing a strict global total ordering on all system resources (e.g., Lock1 rank 1 < Lock2 rank 2) and requiring that every process request resources strictly in increasing order of enumeration, a cycle in the wait-for graph cannot be formed.

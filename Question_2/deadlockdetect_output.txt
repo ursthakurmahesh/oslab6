@@ -1,0 +1,80 @@
+========================================================
+   DEADLOCK DETECTION USING RESOURCE ALLOCATION GRAPH   
+========================================================
+
+========================================================
+ SCENARIO: Scenario 1 - Acyclic Wait-For Graph (No Deadlock)
+========================================================
+
+--- ALLOCATION MATRIX ---
+Process | R0 R1 R2 
+--------+-------
+   P0   |  1  0  0 
+   P1   |  0  1  0 
+   P2   |  0  0  1 
+   P3   |  0  0  0 
+
+--- REQUEST MATRIX ---
+Process | R0 R1 R2 
+--------+-------
+   P0   |  0  1  0 
+   P1   |  0  0  1 
+   P2   |  0  0  0 
+   P3   |  1  0  0 
+
+--- CONSTRUCTED WAIT-FOR GRAPH (WFG ADJACENCY MATRIX) ---
+        | P0 P1 P2 P3 
+--------+-------
+   P0   |  0  1  0  0 
+   P1   |  0  0  1  0 
+   P2   |  0  0  0  0 
+   P3   |  1  0  0  0 
+
+--- WFG EDGES ---
+  P0  -->  P1 (P0 waiting for resource held by P1)
+  P1  -->  P2 (P1 waiting for resource held by P2)
+  P3  -->  P0 (P3 waiting for resource held by P0)
+--------------------------------------------------------
+
+[RESULT] NO DEADLOCK DETECTED. Wait-for graph is acyclic.
+========================================================
+
+
+========================================================
+ SCENARIO: Scenario 2 - 3-Process Circular Wait Deadlock (P0 -> P1 -> P2 -> P0)
+========================================================
+
+--- ALLOCATION MATRIX ---
+Process | R0 R1 R2 R3 
+--------+-------
+   P0   |  1  0  0  0 
+   P1   |  0  1  0  0 
+   P2   |  0  0  1  0 
+   P3   |  0  0  0  1 
+
+--- REQUEST MATRIX ---
+Process | R0 R1 R2 R3 
+--------+-------
+   P0   |  0  1  0  0 
+   P1   |  0  0  1  0 
+   P2   |  1  0  0  0 
+   P3   |  0  0  1  0 
+
+--- CONSTRUCTED WAIT-FOR GRAPH (WFG ADJACENCY MATRIX) ---
+        | P0 P1 P2 P3 
+--------+-------
+   P0   |  0  1  0  0 
+   P1   |  0  0  1  0 
+   P2   |  1  0  0  0 
+   P3   |  0  0  1  0 
+
+--- WFG EDGES ---
+  P0  -->  P1 (P0 waiting for resource held by P1)
+  P1  -->  P2 (P1 waiting for resource held by P2)
+  P2  -->  P0 (P2 waiting for resource held by P0)
+  P3  -->  P2 (P3 waiting for resource held by P2)
+--------------------------------------------------------
+
+[RESULT] DEADLOCK DETECTED!
+Cycle of processes involved in deadlock: P0 -> P1 -> P2 -> P0
+========================================================

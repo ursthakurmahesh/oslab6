@@ -1,0 +1,52 @@
+========================================================
+ COMBINED SYNCHRONIZATION & DEADLOCK AVOIDANCE (XV6/POSIX) 
+========================================================
+Total Resources: Printer = 2, Scanner = 1, Disk = 2
+Strategy: Global Hierarchical Resource Ordering + Capacity Bounds
+Processes: 5 Concurrent Workers
+========================================================
+
+========================================================
+               STARTING EXECUTION CYCLE 1               
+========================================================
+
+>>> [Cycle 1] Process P0 initiating work cycle (Needs: Printer & Scanner) <<<
+[Process P0] REQUESTING resource: Printer (Type 0)
+[Process P0] GRANTED resource: Printer (Type 0) | Remaining Printer instances: 1
+[Process P0] REQUESTING resource: Scanner (Type 1)
+[Process P0] GRANTED resource: Scanner (Type 1) | Remaining Scanner instances: 0
+[Process P0] STARTING WORK with acquired resources (Printer & Scanner)...
+[Process P0] Working (simulated task execution)...
+[Process P0] WORK COMPLETED successfully.
+[Process P0] RELEASING resource: Scanner (Type 1) | Now available: 1
+[Process P0] RELEASING resource: Printer (Type 0) | Now available: 2
+<<< [Cycle 1] Process P0 completed cycle >>>
+
+>>> [Cycle 1] Process P1 initiating work cycle (Needs: Scanner & Disk) <<<
+[Process P1] REQUESTING resource: Scanner (Type 1)
+[Process P1] GRANTED resource: Scanner (Type 1) | Remaining Scanner instances: 0
+[Process P1] REQUESTING resource: Disk (Type 2)
+[Process P1] GRANTED resource: Disk (Type 2) | Remaining Disk instances: 1
+[Process P1] STARTING WORK with acquired resources (Scanner & Disk)...
+[Process P1] Working (simulated task execution)...
+[Process P1] WORK COMPLETED successfully.
+[Process P1] RELEASING resource: Disk (Type 2) | Now available: 2
+[Process P1] RELEASING resource: Scanner (Type 1) | Now available: 1
+<<< [Cycle 1] Process P1 completed cycle >>>
+
+>>> [Cycle 1] Process P2 initiating work cycle (Needs: Printer & Disk) <<<
+[Process P2] REQUESTING resource: Printer (Type 0)
+[Process P2] GRANTED resource: Printer (Type 0) | Remaining Printer instances: 1
+[Process P2] REQUESTING resource: Disk (Type 2)
+[Process P2] GRANTED resource: Disk (Type 2) | Remaining Disk instances: 1
+[Process P2] STARTING WORK with acquired resources (Printer & Disk)...
+[Process P2] Working (simulated task execution)...
+[Process P2] WORK COMPLETED successfully.
+[Process P2] RELEASING resource: Disk (Type 2) | Now available: 2
+[Process P2] RELEASING resource: Printer (Type 0) | Now available: 2
+<<< [Cycle 1] Process P2 completed cycle >>>
+
+========================================================
+FINAL VERIFICATION: ALL 5 PROCESSES COMPLETED 3 CYCLES!
+No deadlock detected. Resource limits were strictly respected.
+========================================================
